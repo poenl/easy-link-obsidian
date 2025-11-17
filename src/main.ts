@@ -1,13 +1,11 @@
 import { Editor, Plugin, requestUrl, moment } from 'obsidian'
-import { loadingField, showLoading, removeLoading } from './loading'
 import { EditorView } from '@codemirror/view'
 import { SettingTab } from './settings'
 import { i18n } from './lang'
 
 const DEFAULT_SETTINGS = {
 	autoFormat: true,
-	placeholderText: '[Parsing URL...]',
-	placeholderMode: 'decoration' //文本、装饰
+	placeholder: '[Parsing URL...]'
 }
 const IGNORE_REG = [/<$/, /^\[.*\]:\s*/]
 
@@ -17,7 +15,6 @@ export default class EasyLinkPlugin extends Plugin {
 	async onload() {
 		await this.loadSettings()
 		i18n(moment.locale())
-		this.registerEditorExtension(loadingField)
 
 		this.registerEvent(
 			this.app.workspace.on('editor-paste', async (evt, editor: Editor) => {
@@ -52,25 +49,22 @@ export default class EasyLinkPlugin extends Plugin {
 					}
 				}
 				// 插入占位符
-				const placeholder = this.settings.placeholderText.replace('{url}', url.href)
-				if (this.settings.placeholderMode === 'decoration') {
-					showLoading(editorView, fromOffset, fromOffset, placeholder)
-				} else if (this.settings.placeholderMode === 'text') {
-					editorView.dispatch({
-						changes: {
-							from: fromOffset,
-							to: fromOffset,
-							insert: placeholder
-						}
-					})
-					// 移动光标
-					editor.setCursor({
-						line: from.line,
-						ch: from.ch + placeholder.length
-					})
-				}
+				const placeholder = this.settings.placeholder.replace('{url}', url.href)
 
-				const to = editor.getCursor('from')
+				editorView.dispatch({
+					changes: {
+						from: fromOffset,
+						to: fromOffset,
+						insert: placeholder
+					}
+				})
+				const to = {
+					line: from.line,
+					ch: from.ch + placeholder.length
+				}
+				// 移动光标
+				editor.setCursor(to)
+
 				let finalLink = clipboardText
 
 				// 自动获取网页标题
@@ -78,29 +72,19 @@ export default class EasyLinkPlugin extends Plugin {
 					const res = await requestUrl(url.href)
 					const contentType = res.headers['content-type']
 
+					const line = editor.getLine(from.line)
+
 					if (contentType && contentType.startsWith('text/html')) {
 						const html = res.text
 						const titleMatch = html.match(/<title>(.*?)<\/title>/)
 						const title = titleMatch?.[1] ? titleMatch[1] : 'no title'
 
 						finalLink = `[${title}](${url.href})`
-						editor.replaceRange(finalLink, from, to)
 					} else if (contentType && contentType.startsWith('image')) {
 						finalLink = `![${url.pathname.replace(/.*\//, '')}](${url.href})`
-
-						editor.replaceRange(finalLink, from, to)
-					} else {
-						editor.replaceRange(finalLink, from, to)
 					}
-				} catch {
-					editor.replaceRange(finalLink, from, to)
-				} finally {
-					removeLoading(editorView, fromOffset, fromOffset)
-					editor.setCursor({
-						line: from.line,
-						ch: from.ch + finalLink.length
-					})
-				}
+					editor.setLine(from.line, line.replace(placeholder, finalLink))
+				} catch {}
 			})
 		)
 

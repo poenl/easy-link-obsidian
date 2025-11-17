@@ -27,29 +27,10 @@ export class SettingTab extends PluginSettingTab {
 				})
 			)
 			.addText((text) => {
-				text.setValue(this.plugin.settings.placeholderText).onChange((value) => {
-					this.plugin.settings.placeholderText = value
+				text.setValue(this.plugin.settings.placeholder).onChange((value) => {
+					this.plugin.settings.placeholder = value
 					this.plugin.saveData(this.plugin.settings)
 				})
-			})
-
-		new Setting(containerEl)
-			.setName(t({ en: 'Placeholder Mode', zh: '占位符模式' }))
-			.setDesc(
-				t({
-					en: 'Control the display mode of the placeholder, if using text mode, the undo will restore to the placeholder state',
-					zh: '控制占位符的显示方式，如果使用文本模式，撤销时将恢复到占位符状态'
-				})
-			)
-			.addDropdown((toggle) => {
-				toggle
-					.addOption('decoration', t({ en: 'Decoration', zh: '装饰' }))
-					.addOption('text', t({ en: 'Text', zh: '文本' }))
-					.setValue(this.plugin.settings.placeholderMode)
-					.onChange((value) => {
-						this.plugin.settings.placeholderMode = value
-						this.plugin.saveData(this.plugin.settings)
-					})
 			})
 	}
 }

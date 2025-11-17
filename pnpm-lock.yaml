@@ -8,6 +8,9 @@ importers:
 
   .:
     devDependencies:
+      '@codemirror/view':
+        specifier: ^6.38.8
+        version: 6.38.8
       '@types/node':
         specifier: ^16.11.6
         version: 16.18.126
@@ -25,7 +28,7 @@ importers:
         version: 0.17.3
       obsidian:
         specifier: latest
-        version: 1.10.2-1(@codemirror/state@6.5.0)(@codemirror/view@6.38.1)
+        version: 1.10.2-1(@codemirror/state@6.5.0)(@codemirror/view@6.38.8)
       tslib:
         specifier: 2.4.0
         version: 2.4.0
@@ -38,8 +41,8 @@ packages:
   '@codemirror/state@6.5.0':
     resolution: {integrity: sha512-MwBHVK60IiIHDcoMet78lxt6iw5gJOGSbNbOIVBHWVXIH4/Nq1+GQgLLGgI1KlnN86WDXsPudVaqYHKBIx7Eyw==}
 
-  '@codemirror/view@6.38.1':
-    resolution: {integrity: sha512-RmTOkE7hRU3OVREqFVITWHz6ocgBjv08GoePscAakgVQfciA3SGCEk7mb9IzwW61cKKmlTpHXG6DUE5Ubx+MGQ==}
+  '@codemirror/view@6.38.8':
+    resolution: {integrity: sha512-XcE9fcnkHCbWkjeKyi0lllwXmBLtyYb5dt89dJyx23I9+LSh5vZDIuk7OLG4VM1lgrXZQcY6cxyZyk5WVPRv/A==}
 
   '@esbuild/android-arm64@0.17.3':
     resolution: {integrity: sha512-XvJsYo3dO3Pi4kpalkyMvfQsjxPWHYjoX4MDiB/FUM4YMfWcXa5l4VCwFWVYI1+92yxqjuqrhNg0CZg3gSouyQ==}
@@ -764,7 +767,7 @@ snapshots:
     dependencies:
       '@marijn/find-cluster-break': 1.0.2
 
-  '@codemirror/view@6.38.1':
+  '@codemirror/view@6.38.8':
     dependencies:
       '@codemirror/state': 6.5.0
       crelt: 1.0.6
@@ -1311,10 +1314,10 @@ snapshots:
 
   natural-compare@1.4.0: {}
 
-  obsidian@1.10.2-1(@codemirror/state@6.5.0)(@codemirror/view@6.38.1):
+  obsidian@1.10.2-1(@codemirror/state@6.5.0)(@codemirror/view@6.38.8):
     dependencies:
       '@codemirror/state': 6.5.0
-      '@codemirror/view': 6.38.1
+      '@codemirror/view': 6.38.8
       '@types/codemirror': 5.60.8
       moment: 2.29.4
 
