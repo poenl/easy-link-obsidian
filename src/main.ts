@@ -1,7 +1,7 @@
-import { Editor, Plugin, requestUrl, moment } from 'obsidian'
+import { Editor, Plugin, requestUrl, moment, Notice } from 'obsidian'
 import { EditorView } from '@codemirror/view'
 import { SettingTab } from './settings'
-import { i18n } from './lang'
+import { i18n, t } from './lang'
 
 const DEFAULT_SETTINGS = {
 	autoFormat: true,
@@ -10,7 +10,7 @@ const DEFAULT_SETTINGS = {
 const IGNORE_REG = [/<$/, /^\[.*\]:\s*/]
 
 export default class EasyLinkPlugin extends Plugin {
-	settings: typeof DEFAULT_SETTINGS
+	settings = DEFAULT_SETTINGS
 
 	async onload() {
 		await this.loadSettings()
@@ -84,7 +84,9 @@ export default class EasyLinkPlugin extends Plugin {
 						finalLink = `![${url.pathname.replace(/.*\//, '')}](${url.href})`
 					}
 					editor.setLine(from.line, line.replace(placeholder, finalLink))
-				} catch {}
+				} catch {
+					new Notice(t({ zh: '获取网页标题失败', en: 'Failed to get webpage title' }))
+				}
 			})
 		)
 
@@ -94,7 +96,11 @@ export default class EasyLinkPlugin extends Plugin {
 	onunload() {}
 
 	async loadSettings() {
-		this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData())
+		this.settings = Object.assign(
+			{},
+			DEFAULT_SETTINGS,
+			(await this.loadData()) as typeof DEFAULT_SETTINGS
+		)
 	}
 
 	async saveSettings() {

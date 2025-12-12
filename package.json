@@ -3,6 +3,7 @@
 	"version": "1.0.1",
 	"description": "Automatically converts pasted URLs into titled Markdown links.",
 	"main": "main.js",
+	"type": "module",
 	"scripts": {
 		"dev": "node esbuild.config.mjs",
 		"build": "tsc -noEmit -skipLibCheck && node esbuild.config.mjs production",
@@ -14,11 +15,12 @@
 	"packageManager": "pnpm@10.18.3",
 	"devDependencies": {
 		"@codemirror/view": "^6.38.8",
-		"@types/node": "^16.11.6",
-		"@typescript-eslint/eslint-plugin": "5.29.0",
-		"@typescript-eslint/parser": "5.29.0",
-		"builtin-modules": "3.3.0",
+		"@typescript-eslint/eslint-plugin": "^8.49.0",
+		"@typescript-eslint/parser": "^8.49.0",
+		"@typescript-eslint/utils": "^8.49.0",
 		"esbuild": "0.17.3",
+		"eslint": "^9.39.1",
+		"eslint-plugin-obsidianmd": "^0.1.9",
 		"obsidian": "latest",
 		"tslib": "2.4.0",
 		"typescript": "latest"

@@ -1,4 +1,4 @@
-import { App, PluginSettingTab, Setting } from 'obsidian'
+import { App, PluginSettingTab, Setting, Notice } from 'obsidian'
 import EasyLinkPlugin from './main'
 import { t } from './lang'
 import manifest from '../manifest.json'
@@ -27,9 +27,13 @@ export class SettingTab extends PluginSettingTab {
 				})
 			)
 			.addText((text) => {
-				text.setValue(this.plugin.settings.placeholder).onChange((value) => {
+				text.setValue(this.plugin.settings.placeholder).onChange(async (value) => {
 					this.plugin.settings.placeholder = value
-					this.plugin.saveData(this.plugin.settings)
+					try {
+						await this.plugin.saveData(this.plugin.settings)
+					} catch {
+						new Notice(t({ en: 'Save failed', zh: '保存失败' }))
+					}
 				})
 			})
 	}
