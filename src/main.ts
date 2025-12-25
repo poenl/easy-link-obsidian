@@ -23,8 +23,8 @@ export default class EasyLinkPlugin extends Plugin {
 
 				if (!this.settings.autoFormat) return
 				// 剪切板内容
-				const clipboardText = evt.clipboardData?.getData('text/plain')
-				if (!clipboardText) return
+				const clipboardText = evt.clipboardData?.getData('text/plain').trim()
+				if (!clipboardText || !clipboardText.startsWith('http')) return
 
 				const url = URL.parse(clipboardText)
 				if (!url) return
