@@ -4,7 +4,6 @@ import { SettingTab } from './settings'
 import { i18n, t } from './lang'
 
 const DEFAULT_SETTINGS = {
-	autoFormat: true,
 	placeholder: '[Parsing URL...]'
 }
 const IGNORE_REG = [/<$/, /^\[.*\]:\s*/]
@@ -21,7 +20,6 @@ export default class EasyLinkPlugin extends Plugin {
 				// @ts-expect-error, not typed
 				const editorView = editor.cm as EditorView
 
-				if (!this.settings.autoFormat) return
 				// 剪切板内容
 				const clipboardText = evt.clipboardData?.getData('text/plain').trim()
 				if (!clipboardText || !clipboardText.startsWith('http')) return
@@ -40,6 +38,10 @@ export default class EasyLinkPlugin extends Plugin {
 				const from = editor.getCursor('from')
 				const fromOffset = editor.posToOffset(from)
 				// 处理需要跳过的情况
+				if ((evt.target as HTMLElement).className.includes('codeblock')) {
+					editor.replaceSelection(clipboardText)
+					return
+				}
 				const lineText = editor.getLine(from.line)
 				for (let index = 0; index < this.ignore.length; index++) {
 					const reg = this.ignore[index]
